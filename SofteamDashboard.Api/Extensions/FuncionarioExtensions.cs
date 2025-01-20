@@ -9,6 +9,7 @@ public static class FuncionarioExtensions
     {
         return new HabilidadeFuncionarioDTO()
         {
+            Id = habilidade.Id,
             Nivel = habilidade.Nivel,
             NomeHabilidade = habilidade.NomeHabilidade,
             Verificado = habilidade.Verificado

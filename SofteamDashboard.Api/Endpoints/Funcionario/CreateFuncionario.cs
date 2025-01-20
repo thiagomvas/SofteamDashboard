@@ -39,6 +39,6 @@ public class CreateFuncionario : Endpoint<CreateFuncionarioRequest, FuncionarioD
         _context.Funcionarios.Add(funcionario);
         _context.SaveChanges();
         
-        return SendOkAsync(funcionario.ToDto(), ct);
+        return SendCreatedAtAsync<GetFuncionarios>(null, funcionario.ToDto(), cancellation: ct);
     }
 }
