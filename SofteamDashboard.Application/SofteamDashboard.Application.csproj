@@ -15,4 +15,10 @@
       <ProjectReference Include="..\SofteamDashboard.Core\SofteamDashboard.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Microsoft.EntityFrameworkCore.Relational">
+        <HintPath>..\..\..\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
