@@ -22,7 +22,9 @@ public class GetFuncionarios : EndpointWithoutRequest<IEnumerable<FuncionarioDTO
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var funcionarios = await _context.Funcionarios.ToListAsync();
+        var funcionarios = await _context.Funcionarios
+            .Include(f => f.Habilidades)
+            .ToListAsync();
         var dtos = funcionarios.Select(f => f.ToDto());
 
         await SendOkAsync(dtos, ct);

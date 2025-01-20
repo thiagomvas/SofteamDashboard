@@ -22,4 +22,8 @@
       <ProjectReference Include="..\SofteamDashboard.Application\SofteamDashboard.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Endpoints\Funcionario\Habilidade\" />
+    </ItemGroup>
+
 </Project>
