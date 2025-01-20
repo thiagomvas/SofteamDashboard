@@ -2,6 +2,7 @@ using FastEndpoints;
 using SofteamDashboard.Api.Extensions;
 using SofteamDashboard.Api.Models;
 using SofteamDashboard.Application;
+using SofteamDashboard.Core.Entities;
 
 namespace SofteamDashboard.Api.Endpoints.Funcionario;
 
@@ -28,7 +29,11 @@ public class CreateFuncionario : Endpoint<CreateFuncionarioRequest, FuncionarioD
             LinkedInUrl = req.LinkedInUrl,
             Cargo = req.Cargo,
             Area = req.Area,
-            Habilidades = []
+            Habilidades = req.Habilidades.Select(h => new HabilidadeFuncionario()
+            {
+                NomeHabilidade = h.Nome,
+                Nivel = h.Nivel
+            }).ToList()
         };
 
         _context.Funcionarios.Add(funcionario);
