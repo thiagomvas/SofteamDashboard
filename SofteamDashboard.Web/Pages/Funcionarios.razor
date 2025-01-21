@@ -7,7 +7,7 @@
 
 <MudContainer Class="pa-4">
     <MudGrid GutterSize="3">
-        @foreach (var funcionario in funcionarios)
+        @foreach (var funcionario in funcionarios.OrderBy(f => f.Nome))
         {
             <MudItem xs="12" sm="6" md="4">
                 <MudCard Class="pa-4 max-width-500" Outlined="true">
@@ -48,14 +48,13 @@
                         <MudLink Href="@funcionario.GithubUrl" Target="_blank" Color="Color.Primary">
                             <MudIcon Icon="@Icons.Custom.Brands.GitHub" Class="mr-1" /> GitHub
                         </MudLink>
-                        <MudText> | </MudText>
                         <MudLink Href="@funcionario.LinkedInUrl" Target="_blank" Color="Color.Primary">
                             <MudIcon Icon="@Icons.Custom.Brands.LinkedIn" Class="mr-1" /> LinkedIn
                         </MudLink>
                     </MudCardContent>
 
                     <MudCardActions Class="justify-end">
-                        <MudButton Variant="Variant.Text" Color="Color.Primary" Target="_blank" Href="@funcionario.LinkedInUrl">
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" Href=@($"/funcionarios/{funcionario.Id}")>
                             Visualizar
                         </MudButton>
                     </MudCardActions>
