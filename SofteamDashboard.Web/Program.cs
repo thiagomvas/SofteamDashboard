@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using SofteamDashboard.Application;
 using SofteamDashboard.Application.Services;
 using SofteamDashboard.Core.Abstractions;
@@ -10,6 +11,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddMudServices();
 builder.Services.AddScoped<SofteamDbContext>(provider =>
 {
     var options = new DbContextOptionsBuilder<SofteamDbContext>()
