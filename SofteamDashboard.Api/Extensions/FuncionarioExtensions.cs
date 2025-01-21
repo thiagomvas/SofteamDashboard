@@ -20,6 +20,7 @@ public static class FuncionarioExtensions
     {
         var result = new FuncionarioDTO()
         {
+            Id = funcionario.Id,
             Area = funcionario.Area,
             Cargo = funcionario.Cargo,
             GithubUrl = funcionario.GithubUrl,

@@ -14,7 +14,7 @@ public class DeleteHabilidade : EndpointWithoutRequest
     }
     public override void Configure()
     {
-        Delete("api/funcionarios/{funcionarioId}/habilidades/{id}");
+        Delete("api/funcionarios/{funcionarioId}/habilidades/{habilidadeId}");
         AllowAnonymous();
     }
 

@@ -4,6 +4,6 @@ namespace SofteamDashboard.Api.Models;
 
 public class CreateHabilidadeRequest
 {
-    public string Nome { get; set; }
+    public string NomeHabilidade { get; set; }
     public Nivel Nivel { get; set; } = Nivel.Nenhum;
 }

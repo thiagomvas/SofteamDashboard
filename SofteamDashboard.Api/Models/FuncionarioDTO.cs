@@ -5,6 +5,7 @@ namespace SofteamDashboard.Api.Models;
 
 public class FuncionarioDTO
 {
+    public int Id { get; set; }
     public string Nome { get; set; } = string.Empty;
     public string GithubUrl { get; set; } = string.Empty;
     public string LinkedInUrl { get; set; } = string.Empty;

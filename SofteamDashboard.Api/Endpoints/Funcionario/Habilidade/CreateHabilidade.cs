@@ -26,7 +26,7 @@ public class CreateHabilidade : Endpoint<CreateHabilidadeRequest, HabilidadeFunc
         var habilidade = new HabilidadeFuncionario()
         {
             FuncionarioId = funcionarioId,
-            NomeHabilidade = req.Nome,
+            NomeHabilidade = req.NomeHabilidade,
             Nivel = req.Nivel,
             Verificado = false
         };

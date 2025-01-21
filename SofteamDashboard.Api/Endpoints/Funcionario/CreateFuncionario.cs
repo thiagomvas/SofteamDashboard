@@ -32,7 +32,7 @@ public class CreateFuncionario : Endpoint<CreateFuncionarioRequest, FuncionarioD
             ProfilePictureUrl = req.ProfilePictureUrl,
             Habilidades = req.Habilidades.Select(h => new HabilidadeFuncionario()
             {
-                NomeHabilidade = h.Nome,
+                NomeHabilidade = h.NomeHabilidade,
                 Nivel = h.Nivel
             }).ToList()
         };
