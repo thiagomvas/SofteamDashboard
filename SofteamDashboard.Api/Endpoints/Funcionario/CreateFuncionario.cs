@@ -29,6 +29,7 @@ public class CreateFuncionario : Endpoint<CreateFuncionarioRequest, FuncionarioD
             LinkedInUrl = req.LinkedInUrl,
             Cargo = req.Cargo,
             Area = req.Area,
+            ProfilePictureUrl = req.ProfilePictureUrl,
             Habilidades = req.Habilidades.Select(h => new HabilidadeFuncionario()
             {
                 NomeHabilidade = h.Nome,

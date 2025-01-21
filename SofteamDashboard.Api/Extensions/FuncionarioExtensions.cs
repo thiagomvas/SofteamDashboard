@@ -32,4 +32,15 @@ public static class FuncionarioExtensions
 
         return result;
     }
+
+    public static ProjetoDTO ToDto(this Projeto projeto)
+    {
+        return new ProjetoDTO()
+        {
+            Titulo = projeto.Titulo,
+            Descricao = projeto.Descricao,
+            Inicio = projeto.Inicio,
+            Fim = projeto.Fim
+        };
+    }
 }

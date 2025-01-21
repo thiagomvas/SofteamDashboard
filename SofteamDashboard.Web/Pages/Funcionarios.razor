@@ -1,0 +1,85 @@
+@page "/funcionarios"
+@inject HttpClient http
+@using SofteamDashboard.Core
+@using SofteamDashboard.Core.Entities
+@using SofteamDashboard.Core.ValueTypes
+@using SofteamDashboard.Web.Models
+
+<MudContainer Class="pa-4">
+    <MudGrid GutterSize="3">
+        @foreach (var funcionario in funcionarios)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Class="pa-4 max-width-500" Outlined="true">
+                    <MudCardHeader>
+                        <MudAvatar Icon="@Icons.Material.Filled.Person" Size="Size.Large" Class="mr-2" />
+                        <MudText Typo="Typo.h5">@funcionario.Nome</MudText>
+                    </MudCardHeader>
+
+                    <MudCardContent>
+                        <MudDivider Class="mb-2" />
+                        <MudText Typo="Typo.body1" Color="Color.Primary">
+                            <MudIcon Icon="@Icons.Material.Filled.Work" Class="mr-1" />
+                            Cargo: <strong>@((Cargo)funcionario.Cargo)</strong>
+                        </MudText>
+                        <MudText Typo="Typo.body1" Color="Color.Secondary">
+                            <MudIcon Icon="@Icons.Material.Filled.AccountTree" Class="mr-1" />
+                            Area: <strong>@((Area)funcionario.Area)</strong>
+                        </MudText>
+
+                        <MudDivider Class="mt-2 mb-2" />
+
+                        <MudText Typo="Typo.subtitle1" Class="mb-1">Skills:</MudText>
+                        <MudList T="FuncionarioDTO" Dense="true">
+                            @foreach (var skill in funcionario.Habilidades.OrderByDescending(h => h.Nivel).Take(5))
+                            {
+                                <MudListItem>
+                                    <MudText>
+                                        <MudIcon Icon="@Icons.Material.Filled.Star" Color="@GetSkillLevelColor(skill.Nivel)" Class="mr-1" />
+                                        @skill.NomeHabilidade (<strong>@skill.Nivel</strong>)
+                                    </MudText>
+                                </MudListItem>
+                            }
+                        </MudList>
+
+                        <MudDivider Class="mt-2 mb-2" />
+
+                        <MudText Typo="Typo.subtitle1">Links:</MudText>
+                        <MudLink Href="@funcionario.GithubUrl" Target="_blank" Color="Color.Primary">
+                            <MudIcon Icon="@Icons.Custom.Brands.GitHub" Class="mr-1" /> GitHub
+                        </MudLink>
+                        <MudText> | </MudText>
+                        <MudLink Href="@funcionario.LinkedInUrl" Target="_blank" Color="Color.Primary">
+                            <MudIcon Icon="@Icons.Custom.Brands.LinkedIn" Class="mr-1" /> LinkedIn
+                        </MudLink>
+                    </MudCardContent>
+
+                    <MudCardActions Class="justify-end">
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" Target="_blank" Href="@funcionario.LinkedInUrl">
+                            Visualizar
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private IEnumerable<FuncionarioDTO> funcionarios = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        funcionarios = await http.GetFromJsonAsync<IEnumerable<FuncionarioDTO>>("/api/funcionarios");
+    }
+
+    private Color GetSkillLevelColor(Nivel nivel)
+    {
+        return nivel switch
+        {
+            Nivel.Avancado => Color.Success, // High level
+            Nivel.Intermediario => Color.Info,       // Medium level
+            _ => Color.Warning     // Low level
+        };
+    }
+}
