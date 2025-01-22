@@ -1,4 +1,4 @@
-namespace SofteamDashboard.Api.Models;
+namespace SofteamDashboard.Web.Models;
 
 public class ProjetoDTO
 {

@@ -54,6 +54,10 @@ public class SofteamDbContext : DbContext
             entity.HasMany(e => e.Funcionarios)
                 .WithOne(f => f.Projeto)
                 .HasForeignKey(f => f.ProjetoId);
+
+            entity.HasOne(p => p.Responsavel)
+                .WithMany() 
+                .HasForeignKey(p => p.ResponsavelId);
         });
 
         base.OnModelCreating(modelBuilder);
