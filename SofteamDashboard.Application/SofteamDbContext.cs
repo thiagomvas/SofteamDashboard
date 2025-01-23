@@ -27,15 +27,9 @@ public class SofteamDbContext : DbContext
                 .HasForeignKey(h => h.FuncionarioId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Many-To-One com Projeto
             entity.HasOne(e => e.Projeto)
-                .WithMany(p => p.Funcionarios)
-                .HasForeignKey(e => e.ProjetoId)
-                .IsRequired(false) 
-                .OnDelete(DeleteBehavior.Restrict); 
-
-            entity.Property(e => e.ProjetoId)
-                .HasDefaultValue(1); 
+                .WithMany()
+                .HasForeignKey(e => e.ProjetoId);
         });
 
         modelBuilder.Entity<HabilidadeFuncionario>(entity =>

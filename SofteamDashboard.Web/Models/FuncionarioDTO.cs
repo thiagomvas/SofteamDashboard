@@ -15,6 +15,7 @@ public class FuncionarioDTO
     public bool Collapsed { get; set; } = true;
     
     public int ProjetoId { get; set; }
+    public ProjetoDTO Projeto { get; set; }
 
     public ICollection<HabilidadeDTO> Habilidades { get; set; } = [];
 }

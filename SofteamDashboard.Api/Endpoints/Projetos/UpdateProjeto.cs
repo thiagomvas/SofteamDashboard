@@ -1,4 +1,5 @@
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using SofteamDashboard.Api.Extensions;
 using SofteamDashboard.Api.Models;
 using SofteamDashboard.Application;
@@ -35,6 +36,13 @@ public class UpdateProjeto : Endpoint<UpdateProjetoRequest, ProjetoDTO>
         projeto.Descricao = request.Descricao ?? projeto.Descricao;
         projeto.Inicio = request.Inicio ?? projeto.Inicio;
         projeto.Fim = request.Fim ?? projeto.Fim;
+        projeto.GithubUrl = request.GithubUrl ?? projeto.GithubUrl;
+
+        var responsavel = await _context.Funcionarios.FirstOrDefaultAsync(f => f.Id == request.ResponsavelId);
+
+        if (responsavel is not null)
+            projeto.Responsavel = responsavel;
+        
         
         await _context.SaveChangesAsync(ct);
         

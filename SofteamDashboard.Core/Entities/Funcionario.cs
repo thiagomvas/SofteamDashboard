@@ -4,7 +4,7 @@ namespace SofteamDashboard.Core.Entities;
 
 public class Funcionario
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     public string Nome { get; set; } = string.Empty;
     public string ProfilePictureUrl { get; set; } = string.Empty;
     public string GithubUrl { get; set; } = string.Empty;
@@ -12,8 +12,8 @@ public class Funcionario
     public Cargo Cargo { get; set; } = Cargo.Membro;
     public Area Area { get; set; } = Area.Nenhum;
 
-    public int ProjetoId { get; set; } = 1;
-    public Projeto Projeto { get; set; }
+    public int? ProjetoId { get; set; } = 1;
+    public Projeto? Projeto { get; set; }
 
     public ICollection<HabilidadeFuncionario> Habilidades { get; set; }
 }

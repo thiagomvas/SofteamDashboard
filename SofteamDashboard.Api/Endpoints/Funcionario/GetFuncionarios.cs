@@ -24,6 +24,7 @@ public class GetFuncionarios : EndpointWithoutRequest<IEnumerable<FuncionarioDTO
     {
         var funcionarios = await _context.Funcionarios
             .Include(f => f.Habilidades)
+            .Include(f => f.Projeto)
             .ToListAsync();
         var dtos = funcionarios.Select(f => f.ToDto());
 

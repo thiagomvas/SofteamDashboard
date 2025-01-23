@@ -1,32 +1,36 @@
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using SofteamDashboard.Api.Extensions;
 using SofteamDashboard.Api.Models;
 using SofteamDashboard.Application;
 
 namespace SofteamDashboard.Api.Endpoints.Projetos;
 
-public class GetProjetos : EndpointWithoutRequest<IEnumerable<ProjetoDTO>>
+public class GetProjeto : EndpointWithoutRequest<ProjetoDTO>
 {
     private readonly SofteamDbContext _context;
     
-    public GetProjetos(SofteamDbContext context)
+    public GetProjeto(SofteamDbContext context)
     {
         _context = context;
     }
+    
     public override void Configure()
     {
-        Get("api/projetos");
+        Get("api/projetos/{id}");
         AllowAnonymous();
     }
-
+    
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var projetos = await _context.Projetos
-            .Include(p => p.Responsavel)
-            .ToListAsync();
-        var projetosDto = projetos.Select(p => p.ToDto());
-
-        await SendOkAsync(projetosDto, ct);
+        var id = Route<int>("id");
+        var projeto = await _context.Projetos.FindAsync(id);
+        
+        if(projeto is null)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
+        
+        await SendOkAsync(projeto.ToDto(), ct);
     }
 }

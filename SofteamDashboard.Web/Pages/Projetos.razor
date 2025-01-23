@@ -1,0 +1,106 @@
+@page "/projetos"
+@using SofteamDashboard.Core.ValueTypes
+@using SofteamDashboard.Web.Models
+@inject HttpClient http
+@inject NavigationManager nav
+<MudContainer Class="pa-4">
+    <MudGrid GutterSize="3" Class="mb-4">
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField @bind-Value="searchQuery" Placeholder="Search by title" Icon="@Icons.Material.Filled.Search" Immediate="true" Class="w-100"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudSelect @bind-Value="selectedStatus" Placeholder="Filter by status" Class="w-100">
+                <MudSelectItem Value="StatusProjeto.None">All</MudSelectItem>
+                <MudSelectItem Value="StatusProjeto.Lead">Lead</MudSelectItem>
+                <MudSelectItem Value="StatusProjeto.Planejamento">Planejamento</MudSelectItem>
+                <MudSelectItem Value="StatusProjeto.Andamento">Andamento</MudSelectItem>
+                <MudSelectItem Value="StatusProjeto.Concluido">Concluido</MudSelectItem>
+            </MudSelect>
+        </MudItem>
+        <MudButton Color="Color.Primary" Variant="Variant.Outlined" OnClick="@(async () => await CreateProjeto())">Criar Projeto</MudButton>
+    </MudGrid>
+
+    <MudGrid GutterSize="3">
+        @foreach (var projeto in FilteredProjetos)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Class="pa-4 max-width-500" Outlined="true">
+                    <MudCardHeader>
+                        <MudAvatar Icon="@Icons.Material.Filled.Work" Size="Size.Large" Class="mr-2"/>
+                        <MudText Typo="Typo.h5">@projeto.Titulo</MudText>
+                        <MudSpacer/>
+                        <MudText Typo="Typo.h5" Color="@GetColorForStatus(projeto.Status)"> @projeto.Status </MudText>
+                    </MudCardHeader>
+
+                    <MudCardContent>
+                        <MudDivider Class="mb-2"/>
+                        @if (projeto.Responsavel != null)
+                        {
+                            <MudText Typo="Typo.body1" Color="Color.Primary">
+                                <MudIcon Icon="@Icons.Material.Filled.Person" Class="mr-1"/>
+                                Responsavel: @projeto.Responsavel.Nome
+                            </MudText>
+                        }
+
+                        <MudDivider Class="mt-2 mb-2"/>
+                        <MudText Typo="Typo.body1" Color="Color.Secondary">
+                            <MudIcon Icon="@Icons.Material.Filled.Description" Class="mr-1"/>
+                            Descrição: <strong>@projeto.Descricao</strong>
+                        </MudText>
+                        <MudText>
+                            <MudIcon Icon="@Icons.Material.Filled.DateRange" Class="mr-1"/>
+                            <strong>@projeto.Inicio</strong>
+                            <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Class="mx-1"/>
+                            <strong>@projeto.Fim</strong>
+                        </MudText>
+                    </MudCardContent>
+
+                    <MudCardActions>
+                        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Target="_blank" Href="@projeto.GithubUrl"/>
+                        <MudSpacer/>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Menu" OnClick=@(() => nav.NavigateTo($"/projetos/{projeto.Id}"))>
+                            Visualizar
+                        </MudButton>
+                    </MudCardActions>
+
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+
+    private IEnumerable<ProjetoDTO> projetos = [];
+    private string searchQuery = string.Empty;
+    private StatusProjeto selectedStatus = StatusProjeto.None;
+
+    private IEnumerable<ProjetoDTO> FilteredProjetos => projetos
+        .Where(p => (string.IsNullOrEmpty(searchQuery) || p.Titulo.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) &&
+                    (selectedStatus == StatusProjeto.None || p.Status == selectedStatus));
+
+    protected override async Task OnInitializedAsync()
+    {
+        projetos = await http.GetFromJsonAsync<IEnumerable<ProjetoDTO>>("/api/projetos");
+    }
+
+    private async Task CreateProjeto()
+    {
+            var target = new ProjetoDTO();
+            var response = await http.PostAsJsonAsync("/api/projetos", target);
+            var result = await response.Content.ReadFromJsonAsync<ProjetoDTO>();
+            nav.NavigateTo($"/projetos/{result.Id}");
+    }
+
+    private Color GetColorForStatus(StatusProjeto status)
+    {
+        return status switch
+        {
+            StatusProjeto.Lead => Color.Info,
+            StatusProjeto.Planejamento => Color.Warning,
+            StatusProjeto.Andamento => Color.Primary,
+            StatusProjeto.Concluido => Color.Success,
+            _ => Color.Error
+        };
+    }
+}

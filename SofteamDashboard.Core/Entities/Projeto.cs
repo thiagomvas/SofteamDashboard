@@ -12,7 +12,7 @@ public class Projeto
     public DateTime Inicio { get; set; } = DateTime.Now;
     public DateTime Fim { get; set; } = DateTime.Now;
     
-    public int ResponsavelId { get; set; }
-    public Funcionario Responsavel { get; set; }
+    public int? ResponsavelId { get; set; }
+    public Funcionario? Responsavel { get; set; }
     public ICollection<Funcionario> Funcionarios { get; set; }
 }

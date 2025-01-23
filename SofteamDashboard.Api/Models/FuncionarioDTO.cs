@@ -12,5 +12,7 @@ public class FuncionarioDTO
     public Cargo Cargo { get; set; } = Cargo.Membro;
     public Area Area { get; set; } = Area.Nenhum;
 
+    public int ProjetoId { get; set; }
+    public ProjetoDTO? Projeto { get; set; }
     public ICollection<HabilidadeFuncionarioDTO> Habilidades { get; set; }
 }

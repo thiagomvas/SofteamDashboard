@@ -45,7 +45,7 @@ namespace SofteamDashboard.Application.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProjetoId")
+                    b.Property<int?>("ProjetoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -96,10 +96,17 @@ namespace SofteamDashboard.Application.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Fim")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("GithubUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Inicio")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("ResponsavelId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
@@ -112,6 +119,8 @@ namespace SofteamDashboard.Application.Migrations
 
                     b.HasIndex("Id");
 
+                    b.HasIndex("ResponsavelId");
+
                     b.ToTable("Projetos");
                 });
 
@@ -119,9 +128,7 @@ namespace SofteamDashboard.Application.Migrations
                 {
                     b.HasOne("SofteamDashboard.Core.Entities.Projeto", "Projeto")
                         .WithMany("Funcionarios")
-                        .HasForeignKey("ProjetoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjetoId");
 
                     b.Navigation("Projeto");
                 });
@@ -135,6 +142,15 @@ namespace SofteamDashboard.Application.Migrations
                         .IsRequired();
 
                     b.Navigation("Funcionario");
+                });
+
+            modelBuilder.Entity("SofteamDashboard.Core.Entities.Projeto", b =>
+                {
+                    b.HasOne("SofteamDashboard.Core.Entities.Funcionario", "Responsavel")
+                        .WithMany()
+                        .HasForeignKey("ResponsavelId");
+
+                    b.Navigation("Responsavel");
                 });
 
             modelBuilder.Entity("SofteamDashboard.Core.Entities.Funcionario", b =>

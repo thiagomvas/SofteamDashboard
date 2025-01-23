@@ -16,7 +16,7 @@ public static class FuncionarioExtensions
         };
     }
     
-    public static FuncionarioDTO ToDto(this Funcionario funcionario)
+    public static FuncionarioDTO ToDto(this Funcionario funcionario, bool callChild = true)
     {
         var result = new FuncionarioDTO()
         {
@@ -25,8 +25,14 @@ public static class FuncionarioExtensions
             Cargo = funcionario.Cargo,
             GithubUrl = funcionario.GithubUrl,
             LinkedInUrl = funcionario.LinkedInUrl,
-            Nome = funcionario.Nome
+            Nome = funcionario.Nome,
+            ProjetoId = funcionario.ProjetoId ?? 0,
         };
+        
+        
+        if (funcionario.Projeto is not null && callChild)
+            result.Projeto = funcionario.Projeto.ToDto(false);
+        
         
         if(funcionario.Habilidades is not null)
             result.Habilidades = funcionario.Habilidades.Select(h => h.ToDto()).ToList();
@@ -34,14 +40,22 @@ public static class FuncionarioExtensions
         return result;
     }
 
-    public static ProjetoDTO ToDto(this Projeto projeto)
+    public static ProjetoDTO ToDto(this Projeto projeto, bool callChild = true)
     {
-        return new ProjetoDTO()
+        var result =  new ProjetoDTO()
         {
+            Id = projeto.Id,
             Titulo = projeto.Titulo,
             Descricao = projeto.Descricao,
             Inicio = projeto.Inicio,
-            Fim = projeto.Fim
+            Fim = projeto.Fim,
+            GithubUrl = projeto.GithubUrl,
+            ResponsavelId = projeto.ResponsavelId ?? 0,
+            Status = projeto.Status
         };
+        if (projeto.Responsavel is not null && callChild)
+            result.Responsavel = projeto.Responsavel.ToDto(false);
+
+        return result;
     }
 }

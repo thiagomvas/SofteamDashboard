@@ -10,4 +10,5 @@ public class UpdateFuncionarioRequest
     public string? LinkedInUrl { get; set; }
     public Cargo? Cargo { get; set; }
     public Area? Area { get; set; }
+    public int ProjetoId { get; set; }
 }

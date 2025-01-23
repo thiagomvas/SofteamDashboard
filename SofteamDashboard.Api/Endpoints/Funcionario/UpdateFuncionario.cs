@@ -40,6 +40,12 @@ public class UpdateFuncionario : Endpoint<UpdateFuncionarioRequest, FuncionarioD
         funcionario.LinkedInUrl = req.LinkedInUrl ?? funcionario.LinkedInUrl;
         funcionario.Cargo = req.Cargo ?? funcionario.Cargo;
         funcionario.Area = req.Area ?? funcionario.Area;
+        if (req.ProjetoId > 0)
+        {
+            var projeto = await _context.Projetos.FirstOrDefaultAsync(p => p.Id == req.ProjetoId, ct);
+            if (projeto is not null)
+                funcionario.Projeto = projeto;
+        }
 
         _context.Funcionarios.Update(funcionario);
         await _context.SaveChangesAsync(ct);

@@ -1,0 +1,161 @@
+@page "/projetos/{Id}"
+@using SofteamDashboard.Core.ValueTypes
+@using SofteamDashboard.Web.Models
+@inject HttpClient http
+
+<MudIconButton Icon="@(editMode ? Icons.Material.Filled.Save : Icons.Material.Filled.Edit)"
+               OnClick="@(async () => await ToggleEditMode())"/>
+
+@if (projeto is not null)
+{
+    @if (editMode)
+    {
+        <PageTitle>EDIÇÃO - @projeto.Titulo</PageTitle>
+        <MudTextField Label="Título" @bind-Value="projeto.Titulo"/>
+        <MudTextField Label="Descrição" @bind-Value="projeto.Descricao"/>
+        <MudSelect T="StatusProjeto" Label="Status" @bind-Value="projeto.Status">
+            @foreach (var status in Enum.GetValues<StatusProjeto>())
+            {
+                <MudSelectItem Value="status">@status</MudSelectItem>
+            }
+        </MudSelect>
+        <MudDatePicker Label="Data Início" @bind-Date="projeto.Inicio"/>
+        <MudDatePicker Label="Data Fim" @bind-Date="projeto.Fim"/>
+        <MudTextField Label="Github Url" @bind-Value="projeto.GithubUrl"/>
+
+        <MudSelect T="int" Label="Responsável" @bind-Value="projeto.ResponsavelId">
+            @foreach (var funcionario in funcionarios)
+            {
+                <MudSelectItem Value="funcionario.Id">@funcionario.Nome</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudDivider Class="mb-2"/>
+        <MudSelect T="FuncionarioDTO" @bind-Value="paraAdd">
+            @foreach (var funcionario in funcionarios)
+            {
+                <MudSelectItem Value="funcionario">@funcionario.Nome</MudSelectItem>
+            }
+        </MudSelect>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(_ => AddFuncionario(paraAdd))">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-1"/>
+            Adicionar Funcionário
+        </MudButton>
+        <MudList T="FuncionarioDTO" Dense="true">
+            @foreach (var funcionario in projeto.Funcionarios)
+            {
+                <MudListItem>
+                    <MudText>@funcionario.Nome</MudText>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"
+                                   OnClick="@(_ => RemoveFuncionario(funcionario))"/>
+                </MudListItem>
+            }
+        </MudList>
+    }
+    else
+    {
+        <PageTitle>@projeto.Titulo</PageTitle>
+        <MudText Typo="Typo.h3">@projeto.Titulo</MudText>
+        <MudDivider Class="mb-2"/>
+        <MudText Typo="Typo.body1" Color="Color.Primary">
+            <MudIcon Icon="@Icons.Material.Filled.Description" Class="mr-1"/>
+            Descrição: @projeto.Descricao
+        </MudText>
+        @if (projeto.Inicio is not null)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary">
+                <MudIcon Icon="@Icons.Material.Filled.DateRange" Class="mr-1"/>
+                Início: <strong>@projeto.Inicio.Value.ToShortDateString()</strong>
+            </MudText>
+        }
+
+        @if (projeto.Fim is not null)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Secondary">
+                <MudIcon Icon="@Icons.Material.Filled.DateRange" Class="mr-1"/>
+                Fim: <strong>@projeto.Fim.Value.ToShortDateString()</strong>
+            </MudText>
+        }
+            
+        <MudLink Href="@projeto.GithubUrl" Target="_blank" Color="Color.Primary">
+            <MudIcon Icon="@Icons.Custom.Brands.GitHub" Class="mr-1"/>
+            GitHub
+        </MudLink>
+
+        <MudDivider Class="mb-2"/>
+        <MudText Typo="Typo.h4" Class="mb-1">Funcionários:</MudText>
+        <MudList T="FuncionarioDTO" Dense="true">
+            @if (projeto.Funcionarios != null)
+            {
+                @foreach (var funcionario in projeto.Funcionarios)
+                {
+                    <MudListItem>
+                        <MudText>@funcionario.Nome</MudText>
+                    </MudListItem>
+                }
+            }
+
+        </MudList>
+    }
+}
+else
+{
+    <PageTitle>Carregando</PageTitle>
+    <MudText Typo="Typo.h1">Carregando</MudText>
+}
+
+@code {
+    [Parameter] public string Id { get; set; }
+    private ProjetoDTO projeto;
+    private FuncionarioDTO paraAdd { get; set; }
+    private List<FuncionarioDTO> funcionarios = new();
+    private List<FuncionarioDTO> funcionariosAdicionados = new();
+    private List<FuncionarioDTO> funcionariosRemovidos = new();
+    private bool editMode = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projeto = await http.GetFromJsonAsync<ProjetoDTO>($"/api/projetos/{Id}");
+        projeto.Funcionarios ??= [];
+        projeto.Inicio ??= DateTime.Now;
+        projeto.Fim ??= DateTime.Now;
+        funcionarios = await http.GetFromJsonAsync<List<FuncionarioDTO>>("/api/funcionarios");
+    }
+
+    private async Task ToggleEditMode()
+    {
+        editMode = !editMode;
+        if (!editMode)
+        {
+            await http.PutAsJsonAsync($"api/projetos/{Id}", projeto);
+            foreach (var add in funcionariosAdicionados)
+            {
+                add.ProjetoId = projeto.Id;
+                await http.PutAsJsonAsync($"api/funcionarios/{add.Id}", add);
+            }
+
+            foreach (var remove in funcionariosRemovidos)
+            {
+                remove.ProjetoId = -1;
+                await http.PutAsJsonAsync($"api/funcionarios/{remove.Id}", remove);
+            }
+        }
+    }
+
+    private void AddFuncionario(FuncionarioDTO funcionario)
+    {
+        if(projeto.Funcionarios.Contains(funcionario))
+        {
+            return;
+        }
+        projeto.Funcionarios.Add(funcionario);
+        funcionariosAdicionados.Add(funcionario);
+    }
+
+    private void RemoveFuncionario(FuncionarioDTO funcionario)
+    {
+        projeto.Funcionarios.Remove(funcionario);
+        funcionariosRemovidos.Add(funcionario);
+    }
+
+}

@@ -30,9 +30,11 @@ public class CreateProjeto : Endpoint<CreateProjetoRequest, ProjetoDTO>
             Fim = req.Fim
         };
 
-        _context.Projetos.Add(projeto);
+        var entity = _context.Projetos.Add(projeto);
         await _context.SaveChangesAsync(ct);
+        
+         
 
-        await SendOkAsync(projeto.ToDto(), ct);
+        await SendOkAsync(entity.Entity.ToDto(), ct);
     }
 }
