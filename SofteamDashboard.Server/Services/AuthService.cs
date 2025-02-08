@@ -1,5 +1,6 @@
 using System.Text;
 using FastEndpoints.Security;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SofteamDashboard.Core;
 using SofteamDashboard.Core.Entities;
@@ -16,14 +17,19 @@ public class AuthService
         _context = context;
         _config = config;
     }
-
-    public string GenerateJwtToken(Credenciais credenciais)
+    
+    public async Task<string> GenerateJwtToken(Credenciais credenciais)
     {
+        var permissions = await _context.PermissaoCargos
+            .Where(p => p.CargoId == credenciais.Funcionario.CargoId)
+            .Select(p => p.Permissao.Nome)
+            .ToListAsync();
         return JwtBearer.CreateToken(o =>
         {
             o.SigningKey = _config["Jwt:Key"];
             o.Issuer = _config["Jwt:Issuer"];
             o.Audience = _config["Jwt:Audience"];
+            o.User.Permissions.AddRange(permissions);
         });
     }
 }

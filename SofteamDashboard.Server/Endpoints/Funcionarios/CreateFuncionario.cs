@@ -19,6 +19,7 @@ public class CreateFuncionario : Endpoint<CreateFuncionarioRequest, FuncionarioD
     public override void Configure()
     {
         Post("/api/funcionarios");
+        Permissions(Constants.ADMIN, Constants.MANAGE_FUNCIONARIOS);
     }
 
     public override async Task HandleAsync(CreateFuncionarioRequest req, CancellationToken ct)

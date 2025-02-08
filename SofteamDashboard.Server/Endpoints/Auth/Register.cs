@@ -49,7 +49,7 @@ public class Register : Endpoint<RegisterRequest, AuthResponse>
         
         var response = new AuthResponse()
         {
-            Token = _authService.GenerateJwtToken(creds),
+            Token = await _authService.GenerateJwtToken(creds),
             Id = creds.Funcionario.Id
         };
         

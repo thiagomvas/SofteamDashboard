@@ -21,6 +21,32 @@ namespace SofteamDashboard.Server.Services
             
             await SeedCargoPermissionsAsync();
             await _context.SaveChangesAsync();
+            
+            #if DEBUG
+            // Add an admin user
+            var creds = new Credenciais()
+            {
+                Username = "admin",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin")
+            };
+            
+            var funcionario = new Funcionario()
+            {
+                Nome = "admin"
+            };
+
+            var diretorCargo = await _context.Cargos.FirstOrDefaultAsync(c => c.Nome == Constants.DIRETOR);
+            funcionario.Cargo = diretorCargo;
+            
+            _context.Funcionarios.Add(funcionario);
+            await _context.SaveChangesAsync();
+            
+            funcionario = await _context.Funcionarios.FirstOrDefaultAsync(f => f.Nome == funcionario.Nome);
+            creds.Funcionario = funcionario;
+            
+            _context.Credenciais.Add(creds);
+            await _context.SaveChangesAsync();
+            #endif
         }
 
         private async Task SeedCargosAsync()
