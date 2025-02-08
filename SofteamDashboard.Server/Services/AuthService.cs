@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using SofteamDashboard.Core;
 using SofteamDashboard.Core.Entities;
 
-namespace SofteamDashboard.Server;
+namespace SofteamDashboard.Server.Services;
 
 public class AuthService
 {
