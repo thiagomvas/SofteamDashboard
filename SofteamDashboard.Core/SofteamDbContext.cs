@@ -58,6 +58,10 @@ public class SofteamDbContext : DbContext
         modelBuilder.Entity<Cargo>(entity =>
         {
             entity.HasKey(c => c.Id);
+            
+            entity.HasMany(c => c.Permissoes)
+                .WithOne(pc => pc.Cargo)
+                .HasForeignKey(pc => pc.CargoId);
         });
         
         modelBuilder.Entity<Permissao>(entity =>
@@ -70,7 +74,7 @@ public class SofteamDbContext : DbContext
             entity.HasKey(pc => pc.Id);
             
             entity.HasOne(pc => pc.Cargo)
-                .WithMany()
+                .WithMany(c => c.Permissoes)
                 .HasForeignKey(pc => pc.CargoId);
 
             entity.HasOne(pc => pc.Permissao)

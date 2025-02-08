@@ -5,6 +5,7 @@ using SofteamDashboard.Core;
 using SofteamDashboard.Core.Entities;
 using SofteamDashboard.Server.Models;
 using SofteamDashboard.Server.Models.Responses;
+using SofteamDashboard.Server.Services;
 
 namespace SofteamDashboard.Server.Endpoints.Auth;
 
