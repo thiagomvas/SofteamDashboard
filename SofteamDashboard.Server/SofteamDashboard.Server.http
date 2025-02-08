@@ -1,0 +1,6 @@
+@SofteamDashboard.Server_HostAddress = http://localhost:5197
+
+GET {{SofteamDashboard.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

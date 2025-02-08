@@ -1,0 +1,6 @@
+﻿services:
+  softeamdashboard.server:
+    image: softeamdashboard.server
+    build:
+      context: .
+      dockerfile: SofteamDashboard.Server/Dockerfile
