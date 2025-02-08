@@ -91,5 +91,20 @@ public class SofteamDbContext : DbContext
                 .HasForeignKey<Credenciais>(c => c.FuncionarioId);
         });
     }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+    {
+        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity is BaseEntity && entry.State == EntityState.Added))
+        {
+            ((BaseEntity)entry.Entity).CreatedAt = DateTime.Now;
+        }
+        
+        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity is BaseEntity && entry.State == EntityState.Modified))
+        {
+            ((BaseEntity)entry.Entity).UpdatedAt = DateTime.Now;
+        }
+        
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
     
 }
