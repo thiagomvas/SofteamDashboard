@@ -1,0 +1,123 @@
+:root {
+    --softeam-blue-00: #132639;
+    --softeam-blue-20: #072763;
+    --softeam-blue-40: #1c58a8;
+    --softeam-blue-60: #1074bc;
+    --softeam-blue-80: #94d2ff;
+
+    --get-request: #61affe;
+    --post-request: #49cc90;
+    --put-request: #fca130;
+    --delete-request: #f93e3e;
+
+    --success: #28a745;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --info: #17a2b8;
+    --important: #6f42c1;
+    --light: #f8f9fa;
+    --dark: #343a40;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--dark);
+    background-color: var(--softeam-blue-00);
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: var(--softeam-blue-40); /* Softeam Blue */
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--softeam-blue-20);
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+td {
+    background-color: var(--softeam-blue-60);
+    color: var(--light);
+    font-size: 0.9rem;
+}
+
+tr:nth-child(even) td {
+    background-color: var(--softeam-blue-40);
+}
+
+tr:hover td {
+    background-color: var(--softeam-blue-80);
+    color: var(--dark);
+}
+
+tr:nth-child(odd):hover td {
+    background-color: var(--softeam-blue-80);
+    color: var(--dark);
+}
+
+.method-get, .method-post, .method-put, .method-delete {
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    width: fit-content;
+    text-align: center;
+    display: inline-block;
+    margin: 0;
+    text-transform: uppercase;
+    
+}
+
+/* Adding HTTP method color coding */
+.method-get {
+    background-color: var(--get-request);
+}
+
+.method-post {
+    background-color: var(--post-request);
+}
+
+.method-put {
+    background-color: var(--put-request);
+}
+
+.method-delete {
+    background-color: var(--delete-request);
+}
+
+/* Add some spacing at the bottom */
+.container {
+    margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+    th, td {
+        padding: 8px;
+    }
+}

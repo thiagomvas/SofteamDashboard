@@ -21,4 +21,8 @@
       <ProjectReference Include="..\SofteamDashboard.Core\SofteamDashboard.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\home\index.html" />
+    </ItemGroup>
+
 </Project>
