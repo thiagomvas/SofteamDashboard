@@ -53,6 +53,10 @@ app.UseAuthentication()
     .UseFastEndpoints()
     .UseSwaggerGen();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseRouting();
+
 app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.MapHealthChecks("/health", new HealthCheckOptions()
