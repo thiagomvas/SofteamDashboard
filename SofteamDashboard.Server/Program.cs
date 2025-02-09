@@ -2,10 +2,12 @@ using System.Text.Json;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SofteamDashboard.Core;
 using SofteamDashboard.Server;
+using SofteamDashboard.Server.HealthChecks;
 using SofteamDashboard.Server.Middlewares;
 using SofteamDashboard.Server.Services;
 
@@ -34,6 +36,8 @@ builder.Services.AddScoped<SeedService>();
 var url = builder.Configuration["Url"];
 builder.WebHost.UseUrls(url ?? throw new ArgumentNullException("Url"));
 
+builder.Services.AddHealthChecks()
+    .AddCheck<DatabaseHealthCheck>("Database");
 
 var app = builder.Build();
 
@@ -49,5 +53,25 @@ app.UseAuthentication()
     .UseSwaggerGen();
 
 app.UseMiddleware<RequestLoggingMiddleware>();
+
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var result = JsonSerializer.Serialize(new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(e => new
+            {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                exception = e.Value.Exception?.Message,
+                description = e.Value.Description
+            })
+        });
+        await context.Response.WriteAsync(result);
+    }
+});
 
 app.Run();
