@@ -27,6 +27,7 @@ builder.Services.SwaggerDocument(o =>
         s.Version = "v1";
     };
     o.AutoTagPathSegmentIndex = 2;
+    o.ShortSchemaNames = true;
 });
 
 builder.Services.AddScoped<AuthService>();
