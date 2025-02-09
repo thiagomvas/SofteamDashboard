@@ -20,7 +20,15 @@ public class UpdateFuncionarioInProjeto : Endpoint<UpdateFuncionarioInProjetoReq
     {
         Put("/api/projetos/{projetoId}/funcionarios/{funcionarioId}");
         Permissions(Constants.ADMIN, Constants.MANAGE_PROJETOS);
+        Summary(s =>
+        {
+            s.Summary = "Atualiza um funcionário em um projeto.";
+            s.Description = "Atualiza um funcionário em um projeto com o ID fornecido.";
+            s.Responses[200] = "Funcionário atualizado no projeto com sucesso.";
+            s.Responses[404] = "Projeto ou funcionário não encontrado.";
+        });
     }
+    
     
     public override async Task HandleAsync(UpdateFuncionarioInProjetoRequest req, CancellationToken ct)
     {

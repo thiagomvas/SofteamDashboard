@@ -20,6 +20,13 @@ public class CreateProjeto : Endpoint<CreateProjetoRequest, ProjetoDTO>
     {
         Post("/api/projetos");
         Permissions(Constants.ADMIN, Constants.MANAGE_PROJETOS);
+        Summary(s =>
+        {
+            s.Summary = "Cria um novo projeto.";
+            s.Description = "Cria um novo projeto com as informações fornecidas.";
+            s.Responses[200] = "Projeto criado com sucesso.";
+            s.Responses[400] = "Erro ao criar projeto.";
+        });
     }
     
     public override async Task HandleAsync(CreateProjetoRequest req, CancellationToken ct)

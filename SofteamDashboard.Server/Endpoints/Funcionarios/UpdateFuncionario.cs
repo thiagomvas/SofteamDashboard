@@ -21,6 +21,13 @@ public class UpdateFuncionario : Endpoint<UpdateFuncionarioRequest, FuncionarioD
     {
         Put("/api/funcionarios/{id}");
         Permissions(Constants.ADMIN, Constants.MANAGE_FUNCIONARIOS);
+        Summary(s =>
+        {
+            s.Summary = "Atualiza um funcionário.";
+            s.Description = "Atualiza um funcionário com o ID fornecido.";
+            s.Responses[200] = "Funcionário atualizado com sucesso.";
+            s.Responses[404] = "Funcionário não encontrado.";
+        });
     }
 
     public override async Task HandleAsync(UpdateFuncionarioRequest req, CancellationToken ct)

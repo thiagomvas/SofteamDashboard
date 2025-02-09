@@ -17,6 +17,17 @@ public class GetCargos : EndpointWithoutRequest<IEnumerable<CargoDTO>>
     public override void Configure()
     {
         Get("/api/cargos");
+        Summary(s => 
+        {
+            s.Summary = "Retorna todos os cargos cadastrados.";
+            s.Description = "Retorna todos os cargos cadastrados com varios niveis de aprofundamento.\n" +
+                "Se o parametro 'includeFuncionarios' (bool) for informado, inclui os funcionários do cargo.";
+            s.Params = new Dictionary<string, string>()
+            {
+                { "includeFuncionarios", "Inclui os funcionários do cargo." }
+            };
+            s.Responses[200] = "Cargos retornados com sucesso.";
+        });
     }
 
     public override async Task HandleAsync(CancellationToken ct)

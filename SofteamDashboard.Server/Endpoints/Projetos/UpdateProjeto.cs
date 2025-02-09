@@ -20,7 +20,15 @@ public class UpdateProjeto : Endpoint<UpdateProjetoRequest, ProjetoDTO>
     {
         Put("/api/projetos/{id}");
         Permissions(Constants.ADMIN, Constants.MANAGE_PROJETOS);
+        Summary(s =>
+        {
+            s.Summary = "Atualiza um projeto.";
+            s.Description = "Atualiza um projeto com o ID fornecido.";
+            s.Responses[200] = "Projeto atualizado com sucesso.";
+            s.Responses[404] = "Projeto não encontrado.";
+        });
     }
+    
     
     public override async Task HandleAsync(UpdateProjetoRequest req, CancellationToken ct)
     {

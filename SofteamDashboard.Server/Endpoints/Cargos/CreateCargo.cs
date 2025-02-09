@@ -21,6 +21,13 @@ public class CreateCargo : Endpoint<CreateCargoRequest, CargoDTO>
     {
         Post("/api/cargos");
         Permissions(Constants.ADMIN);
+        Summary(s =>
+        {
+            s.Summary = "Cria um novo cargo.";
+            s.Description = "Cria um novo cargo com as informações fornecidas.";
+            s.Responses[200] = "Cargo criado com sucesso.";
+            s.Responses[400] = "Erro ao criar cargo.";
+        });
     }
     
     public override async Task HandleAsync(CreateCargoRequest req, CancellationToken ct)

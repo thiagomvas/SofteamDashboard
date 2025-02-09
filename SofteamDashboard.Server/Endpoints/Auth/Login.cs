@@ -23,6 +23,13 @@ public class Login : Endpoint<LoginRequest, AuthResponse>
     {
         Post("api/auth/login");
         AllowAnonymous();
+        Summary(s =>
+        {
+            s.Summary = "Autentica um usuário.";
+            s.Description = "Autentica um usuário com as credenciais informadas e retorna um token JWT.";
+            s.Responses[200] = "Usuário autenticado com sucesso.";
+            s.Responses[403] = "Credenciais inválidas.";
+        });
     }
     
     public override async Task HandleAsync(LoginRequest request, CancellationToken ct)

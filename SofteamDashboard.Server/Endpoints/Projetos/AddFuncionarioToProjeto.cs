@@ -18,6 +18,15 @@ public class AddFuncionarioToProjeto : EndpointWithoutRequest<ProjetoDTO>
     public override void Configure()
     {
         Post("/api/projetos/{id}/funcionarios/{funcionarioId}");
+        Permissions(Constants.ADMIN, Constants.MANAGE_PROJETOS);
+        Summary(s =>
+        {
+            s.Summary = "Adiciona um funcionário a um projeto.";
+            s.Description = "Adiciona um funcionário ao projeto com o ID fornecido.";
+            s.Responses[200] = "Funcionário adicionado ao projeto com sucesso.";
+            s.Responses[404] = "Projeto ou funcionário não encontrado.";
+        });
+        
     }
 
     public override async Task HandleAsync(CancellationToken ct)

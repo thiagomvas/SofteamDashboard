@@ -24,6 +24,13 @@ public class Register : Endpoint<RegisterRequest, AuthResponse>
     {
         Post("api/auth/register");
         AllowAnonymous();
+        Summary(s =>
+        {
+            s.Summary = "Registra um novo usuário.";
+            s.Description = "Registra um novo usuário com as credenciais informadas e retorna um token JWT.";
+            s.Responses[200] = "Usuário registrado com sucesso.";
+            s.Responses[400] = "Erro ao registrar usuário.";
+        });
     }
     
     public override async Task HandleAsync(RegisterRequest request, CancellationToken ct)

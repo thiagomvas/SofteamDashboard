@@ -20,6 +20,13 @@ public class UpdateCargo : Endpoint<UpdateCargoRequest, CargoDTO>
     {
         Put("/api/cargos/{id}");
         Permissions(Constants.ADMIN);
+        Summary(s =>
+        {
+            s.Summary = "Atualiza um cargo.";
+            s.Description = "Atualiza um cargo com o ID fornecido.";
+            s.Responses[200] = "Cargo atualizado com sucesso.";
+            s.Responses[404] = "Cargo não encontrado.";
+        });
     }
     
     public override async Task HandleAsync(UpdateCargoRequest req, CancellationToken ct)

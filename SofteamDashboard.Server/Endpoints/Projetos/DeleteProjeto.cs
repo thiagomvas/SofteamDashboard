@@ -15,6 +15,14 @@ public class DeleteProjeto : EndpointWithoutRequest
     public override void Configure()
     {
         Delete("/api/projetos/{id}");
+        Permissions(Constants.ADMIN, Constants.MANAGE_PROJETOS);
+        Summary(s =>
+        {
+            s.Summary = "Deleta um projeto.";
+            s.Description = "Deleta um projeto com o ID fornecido.";
+            s.Responses[204] = "Projeto deletado com sucesso.";
+            s.Responses[404] = "Projeto não encontrado.";
+        });
     }
     
     public override async Task HandleAsync(CancellationToken ct)

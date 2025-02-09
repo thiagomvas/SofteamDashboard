@@ -20,6 +20,13 @@ public class CreateFuncionario : Endpoint<CreateFuncionarioRequest, FuncionarioD
     {
         Post("/api/funcionarios");
         Permissions(Constants.ADMIN, Constants.MANAGE_FUNCIONARIOS);
+        Summary(s =>
+        {
+            s.Summary = "Cria um novo funcionário.";
+            s.Description = "Cria um novo funcionário com as informações fornecidas.";
+            s.Responses[200] = "Funcionário criado com sucesso.";
+            s.Responses[400] = "Erro ao criar funcionário.";
+        });
     }
 
     public override async Task HandleAsync(CreateFuncionarioRequest req, CancellationToken ct)

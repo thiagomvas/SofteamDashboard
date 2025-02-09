@@ -17,6 +17,13 @@ public class DeleteFuncionario : EndpointWithoutRequest
     {
         Delete("/api/funcionarios/{id}");
         Permissions(Constants.ADMIN, Constants.MANAGE_FUNCIONARIOS);
+        Summary(s =>
+        {
+            s.Summary = "Deleta um funcionário.";
+            s.Description = "Deleta um funcionário com o ID fornecido.";
+            s.Responses[200] = "Funcionário deletado com sucesso.";
+            s.Responses[404] = "Funcionário não encontrado.";
+        });
     }
     
     public override async Task HandleAsync(CancellationToken ct)

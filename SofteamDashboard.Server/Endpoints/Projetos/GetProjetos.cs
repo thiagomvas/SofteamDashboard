@@ -19,6 +19,13 @@ public class GetProjetos : EndpointWithoutRequest<IEnumerable<ProjetoDTO>>
     public override void Configure()
     {
         Get("/api/projetos");
+        Summary(s =>
+        {
+            s.Summary = "Retorna todos os projetos cadastrados.";
+            s.Description = "Retorna todos os projetos cadastrados com varios niveis de aprofundamento.\n" +
+                            "Se o parametro 'includeMembros' (bool) for informado, inclui os membros";
+            s.Responses[200] = "Projetos retornados com sucesso.";
+        });
     }
     
     public override async Task HandleAsync(CancellationToken ct)
