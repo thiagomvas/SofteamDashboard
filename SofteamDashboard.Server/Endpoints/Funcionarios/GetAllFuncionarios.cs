@@ -19,7 +19,6 @@ public class GetAllFuncionarios : EndpointWithoutRequest<IEnumerable<Funcionario
     public override void Configure()
     {
         Get("/api/funcionarios");
-        AllowAnonymous();
         Summary(s => 
         {
             s.Summary = "Retorna todos os funcionários cadastrados.";

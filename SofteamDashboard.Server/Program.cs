@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SofteamDashboard.Core;
 using SofteamDashboard.Server;
+using SofteamDashboard.Server.Middlewares;
 using SofteamDashboard.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,4 +47,7 @@ app.UseAuthentication()
     .UseAuthorization()
     .UseFastEndpoints()
     .UseSwaggerGen();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
+
 app.Run();

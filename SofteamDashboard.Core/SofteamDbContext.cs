@@ -17,6 +17,8 @@ public class SofteamDbContext : DbContext
     public DbSet<Projeto> Projetos { get; set; }
     public DbSet<Credenciais> Credenciais { get; set; }
     
+    public DbSet<RequestLog> RequestLogs { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Funcionario>(entity =>

@@ -2,6 +2,10 @@ namespace SofteamDashboard.Server;
 
 public static class Constants
 {
+    #region Claims
+    public const string NAME = "Name";
+    #endregion
+    
     #region Permissoes
     public const string ADMIN = "ADMIN";
     public const string MANAGE_FUNCIONARIOS = "MANAGE_FUNCIONARIOS";

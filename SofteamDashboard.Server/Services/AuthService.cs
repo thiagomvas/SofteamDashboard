@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using FastEndpoints.Security;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ public class AuthService
             o.SigningKey = _config["Jwt:Key"];
             o.Issuer = _config["Jwt:Issuer"];
             o.Audience = _config["Jwt:Audience"];
+            o.User.Claims.Add((Constants.NAME, credenciais.Username));
             o.User.Permissions.AddRange(permissions);
         });
     }
