@@ -15,8 +15,9 @@ public static class FuncionarioExtensions
             Linkedin = funcionario.Linkedin,
             Github = funcionario.Github,
             CargoId = funcionario.CargoId,
-            Cargo = funcionario.Cargo?.Nome,
-            CreatedAt = funcionario.CreatedAt
+            Cargo = funcionario.Cargo?.ToDto(),
+            CreatedAt = funcionario.CreatedAt,
+            UpdatedAt = funcionario.UpdatedAt
         };
     }
 }
