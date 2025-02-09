@@ -8,4 +8,5 @@ public class MembroProjeto : BaseEntity
     public Funcionario Funcionario { get; set; }
     public int ProjetoId { get; set; }
     public Projeto Projeto { get; set; }
+    public CargoProjeto Cargo { get; set; }
 }
