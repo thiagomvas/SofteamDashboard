@@ -23,6 +23,7 @@ builder.Services.SwaggerDocument(o =>
         s.Title = "Softeam Server API";
         s.Version = "v1";
     };
+    o.AutoTagPathSegmentIndex = 2;
 });
 
 builder.Services.AddScoped<AuthService>();

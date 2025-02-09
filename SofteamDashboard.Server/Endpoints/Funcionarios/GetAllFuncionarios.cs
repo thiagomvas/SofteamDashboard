@@ -23,7 +23,10 @@ public class GetAllFuncionarios : EndpointWithoutRequest<IEnumerable<Funcionario
         Summary(s => 
         {
             s.Summary = "Retorna todos os funcionários cadastrados.";
-            s.Description = "Retorna todos os funcionários cadastrados com varios niveis de aprofundamento.";
+            s.Description = "Retorna todos os funcionários cadastrados com varios niveis de aprofundamento.\n" +
+                "Se o parametro 'id' for informado, retorna uma array contendo somente o funcionário com o id informado.\n" +
+                "Se o parametro 'includeCargo' (bool) for informado, inclui o cargo do funcionário.\n" +
+                "Se o parametro 'includePermissoes' (bool) for informado, inclui as permissões do cargo do funcionário.";
             s.Params = new Dictionary<string, string>()
             {
                 { "id", "Id do funcionário a ser retornado." },
