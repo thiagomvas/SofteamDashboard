@@ -3,11 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using SofteamDashboard.Core;
 using SofteamDashboard.Core.Entities;
 using SofteamDashboard.Server.Extensions;
+using SofteamDashboard.Server.Middlewares;
 using SofteamDashboard.Server.Models.DTOs;
+using SofteamDashboard.Server.Models.Requests;
 
 namespace SofteamDashboard.Server.Endpoints.Projetos;
 
-public class GetProjetos : EndpointWithoutRequest<IEnumerable<ProjetoDTO>>
+public class GetProjetos : Endpoint<GetProjetosRequest, IEnumerable<ProjetoDTO>>
 {
     private readonly SofteamDbContext _context;
     
@@ -28,7 +30,7 @@ public class GetProjetos : EndpointWithoutRequest<IEnumerable<ProjetoDTO>>
         });
     }
     
-    public override async Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(GetProjetosRequest req, CancellationToken ct)
     {
         bool includeMembros = Query<bool>("includeMembros", isRequired: false);
         
@@ -39,7 +41,7 @@ public class GetProjetos : EndpointWithoutRequest<IEnumerable<ProjetoDTO>>
             query = query.Include(p => p.Membros);
         }
         
-        var projetos = await query.ToListAsync(ct);
+        var projetos = await query.Skip(req.Page * req.PageSize).Take(req.PageSize).ToListAsync(ct);
         
         await SendOkAsync(projetos.Select(p => p.ToDto()), ct);
     }

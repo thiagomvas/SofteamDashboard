@@ -4,10 +4,11 @@ using SofteamDashboard.Core;
 using SofteamDashboard.Core.Entities;
 using SofteamDashboard.Server.Extensions;
 using SofteamDashboard.Server.Models.DTOs;
+using SofteamDashboard.Server.Models.Requests;
 
 namespace SofteamDashboard.Server.Endpoints.Funcionarios;
 
-public class GetAllFuncionarios : EndpointWithoutRequest<IEnumerable<FuncionarioDTO>>
+public class GetAllFuncionarios : Endpoint<GetFuncionariosRequest, IEnumerable<FuncionarioDTO>>
 {
     private readonly SofteamDbContext _context;
     
@@ -37,17 +38,14 @@ public class GetAllFuncionarios : EndpointWithoutRequest<IEnumerable<Funcionario
         });
     }
 
-    public override async Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(GetFuncionariosRequest req, CancellationToken ct)
     {
-        var id = Query<int?>("id", isRequired: false);
-        var includeCargo = Query<bool>("includeCargo", isRequired: false);
-        var includePermissoes = Query<bool>("includePermissoes", isRequired: false);
 
         IQueryable<Funcionario> query = _context.Funcionarios;
 
-        if (includeCargo)
+        if (req.IncludeCargo)
         {
-            if (includePermissoes)
+            if (req.IncludePermissoes)
             {
                 query = query.Include(f => f.Cargo).ThenInclude(c => c.Permissoes)
                     .ThenInclude(cp => cp.Permissao);
@@ -58,9 +56,9 @@ public class GetAllFuncionarios : EndpointWithoutRequest<IEnumerable<Funcionario
             }
         }
 
-        if (id.HasValue)
+        if (req.Id.HasValue)
         {
-            var funcionario = await query.FirstOrDefaultAsync(f => f.Id == id.Value, ct);
+            var funcionario = await query.FirstOrDefaultAsync(f => f.Id == req.Id.Value, ct);
             if (funcionario is null)
             {
                 await SendNotFoundAsync(ct);
@@ -70,7 +68,7 @@ public class GetAllFuncionarios : EndpointWithoutRequest<IEnumerable<Funcionario
         }
         else
         {
-            var funcionarios = await query.ToListAsync(ct);
+            var funcionarios = await query.Skip(req.Page * req.PageSize).Take(req.PageSize).ToListAsync(ct);
             await SendOkAsync(funcionarios.Select(f => f.ToDto()), ct);
         }
     }

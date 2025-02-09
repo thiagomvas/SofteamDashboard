@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using SofteamDashboard.Core;
 using SofteamDashboard.Server.Extensions;
 using SofteamDashboard.Server.Models.DTOs;
+using SofteamDashboard.Server.Models.Requests;
 
 namespace SofteamDashboard.Server.Endpoints.Cargos;
 
-public class GetCargos : EndpointWithoutRequest<IEnumerable<CargoDTO>>
+public class GetCargos : Endpoint<GetCargosRequest, IEnumerable<CargoDTO>>
 {
     private readonly SofteamDbContext _context;
     
@@ -30,21 +31,21 @@ public class GetCargos : EndpointWithoutRequest<IEnumerable<CargoDTO>>
         });
     }
 
-    public override async Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(GetCargosRequest req, CancellationToken ct)
     {
-        bool includeFuncionarios = Query<bool>("includeFuncionarios", isRequired: false);
         
         var query = _context.Cargos
             .Include(c => c.Permissoes)
             .ThenInclude(cp => cp.Permissao)
             .AsQueryable();
         
-        if (includeFuncionarios)
+        if (req.IncludeFuncionarios)
         {
             query = query.Include(c => c.Funcionarios);
         }
         
-        var cargos = await query.ToListAsync(ct);
+        var cargos = await query
+            .Skip(req.Page * req.PageSize).Take(req.PageSize).ToListAsync(ct);
         
 
         await SendOkAsync(cargos.Select(c => c.ToDto()), ct);
