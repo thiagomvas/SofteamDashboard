@@ -4,6 +4,7 @@ public static class Constants
 {
     #region Claims
     public const string NAME = "Name";
+    public const string USERID = "UserId";
     #endregion
     
     #region Permissoes

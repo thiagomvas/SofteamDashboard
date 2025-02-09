@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text;
 using SofteamDashboard.Core;
 using SofteamDashboard.Core.Entities;
 
@@ -27,17 +28,27 @@ public class RequestLoggingMiddleware
             return;
         }
         
-        var userName = context.User?.Claims.FirstOrDefault(c => c.Type == Constants.NAME)?.Value ?? "Unknown";
+        var userId = int.Parse(context.User?.Claims.FirstOrDefault(c => c.Type == Constants.USERID)?.Value ?? "0");
 
         var requestLog = new RequestLog
         {
-            User = userName,
+            UserId = userId,
             Path = context.Request.Path,
             Method = context.Request.Method,
-            Timestamp = DateTime.UtcNow
+            Timestamp = DateTime.UtcNow,
         };
         
-        _logger.LogInformation("Request: {Method} {Path} by {User}", requestLog.Method, requestLog.Path, requestLog.User);
+        var requestContent = "";
+        context.Request.EnableBuffering();
+        using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, true, 1024, true))
+        {
+            requestContent = await reader.ReadToEndAsync();
+        }
+        context.Request.Body.Position = 0;
+        requestLog.Body = requestContent;
+        
+        
+        _logger.LogInformation("Request: {Method} {Path} with User ID '{UserId}'", requestLog.Method, requestLog.Path, requestLog.UserId);
         
         using (var scope = _scopeFactory.CreateScope())
         {

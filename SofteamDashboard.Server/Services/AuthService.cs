@@ -31,6 +31,7 @@ public class AuthService
             o.Issuer = _config["Jwt:Issuer"];
             o.Audience = _config["Jwt:Audience"];
             o.User.Claims.Add((Constants.NAME, credenciais.Username));
+            o.User.Claims.Add((Constants.USERID, credenciais.FuncionarioId.ToString()));
             o.User.Permissions.AddRange(permissions);
         });
     }
