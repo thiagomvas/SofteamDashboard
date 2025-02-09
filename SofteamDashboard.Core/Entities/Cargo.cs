@@ -8,4 +8,5 @@ public class Cargo : BaseEntity
     public string Descricao { get; set; }
     
     public ICollection<PermissaoCargo> Permissoes { get; set; }
+    public ICollection<Funcionario> Funcionarios { get; set; }
 }

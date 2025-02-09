@@ -10,6 +10,7 @@ public static class CargoExtensions
     {
         var result = new CargoDTO
         {
+            Id = cargo.Id,
             Nome = cargo.Nome,
             Descricao = cargo.Descricao,
             CreatedAt = cargo.CreatedAt,
@@ -18,6 +19,8 @@ public static class CargoExtensions
         };
         if(cargo.Permissoes is not null)
             result.Permissoes = cargo.Permissoes.Select(p => p.Permissao.ToDto()).ToList();
+        if(cargo.Funcionarios is not null)
+            result.Funcionarios = cargo.Funcionarios.Select(f => f.ToDto()).ToList();
         
         return result;
     }
