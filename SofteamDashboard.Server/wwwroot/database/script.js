@@ -1,9 +1,26 @@
 async function fetchData(endpoint) {
-    try {
-        // Fetch data from the selected endpoint
-        const response = await fetch(`/api/${endpoint}`);
-        const data = await response.json();
+    const token = localStorage.getItem("jwt_token"); // Retrieve JWT token from local storage
 
+    if (!token) {
+        console.error("No authentication token found. Redirecting to login...");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/${endpoint}`, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error ${response.status}: ${errorText}`);
+        }
+
+        const data = await response.json();
         console.log(data); // Log the fetched data for debugging
         displayData(data);
     } catch (error) {
@@ -11,7 +28,6 @@ async function fetchData(endpoint) {
     }
 }
 
-// Function to display the data in the table
 function displayData(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const tableHead = document.querySelector("#dataTable thead tr");

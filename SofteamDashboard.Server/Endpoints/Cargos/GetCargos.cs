@@ -39,13 +39,13 @@ public class GetCargos : Endpoint<GetCargosRequest, IEnumerable<CargoDTO>>
             .ThenInclude(cp => cp.Permissao)
             .AsQueryable();
         
-        if (req.IncludeFuncionarios)
+        if (req.IncludeFuncionarios!.Value)
         {
             query = query.Include(c => c.Funcionarios);
         }
         
         var cargos = await query
-            .Skip(req.Page * req.PageSize).Take(req.PageSize).ToListAsync(ct);
+            .Skip(req.Page!.Value * req.PageSize!.Value).Take(req.PageSize!.Value).ToListAsync(ct);
         
 
         await SendOkAsync(cargos.Select(c => c.ToDto()), ct);
