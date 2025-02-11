@@ -17,7 +17,11 @@ builder.Services.AddFastEndpoints()
     .AddAuthenticationJwtBearer(s => s.SigningKey = builder.Configuration["Jwt:Key"])
     .AddAuthorization();
 
-builder.Services.AddDbContext<SofteamDbContext>(o => o.UseInMemoryDatabase("softeamdb"));
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
+//builder.Services.AddDbContext<SofteamDbContext>(o => o.UseInMemoryDatabase("softeamdb"));
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<SofteamDbContext>(
+    o => o.UseNpgsql(connectionString));
 
 builder.Services.SwaggerDocument(o =>
 {

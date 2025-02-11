@@ -1,6 +1,31 @@
-﻿services:
+﻿version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   softeamdashboard.server:
     image: softeamdashboard.server
     build:
       context: .
       dockerfile: SofteamDashboard.Server/Dockerfile
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=mydb;Username=postgres;Password=yourpassword"
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+volumes:
+  postgres_data:
