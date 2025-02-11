@@ -21,7 +21,7 @@ var connectionString = builder.Configuration["ConnectionStrings:DefaultConnectio
 
 //builder.Services.AddDbContext<SofteamDbContext>(o => o.UseInMemoryDatabase("softeamdb"));
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<SofteamDbContext>(
-    o => o.UseNpgsql(connectionString));
+    o => o.UseSqlite(connectionString));
 
 builder.Services.SwaggerDocument(o =>
 {
@@ -82,5 +82,11 @@ app.MapHealthChecks("/health", new HealthCheckOptions()
         await context.Response.WriteAsync(result);
     }
 });
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<SofteamDbContext>();
+    await context.Database.EnsureCreatedAsync();
+}
 
 app.Run();

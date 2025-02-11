@@ -1,6 +1,6 @@
 ﻿# Use the official ASP.NET 8.0 runtime image as the base image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-ARG APP_UID=1000  # You can replace this with your actual user ID if needed
+ARG APP_UID=2000  # You can replace this with your actual user ID if needed
 RUN adduser --uid $APP_UID --disabled-password --gecos "" appuser
 USER appuser
 WORKDIR /app
